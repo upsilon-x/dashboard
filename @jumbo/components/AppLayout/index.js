@@ -15,6 +15,7 @@ const AppLayout = ({ children }) => {
   const { layout } = useContext(AppContext);
   globalStyles();
 
+  console.log("Time to figure out the app layout!", layout);
   switch (layout) {
     case LAYOUT_TYPES.VERTICAL_DEFAULT: {
       return <VerticalDefault children={children} />;
@@ -23,6 +24,7 @@ const AppLayout = ({ children }) => {
       return <VerticalMinimal children={children} />;
     }
     case LAYOUT_TYPES.VERTICAL_MINIMAL_NO_HEADER: {
+      console.log("I love vertical lol");
       return <MinimalNoHeader children={children} />;
     }
     case LAYOUT_TYPES.VERTICAL_MODERN_SIDEBAR: {

@@ -86,6 +86,7 @@ const Header = () => {
       <SidebarToggleHandler edge="start" color="inherit" aria-label="menu" />
       <Logo ml={2} color="white" />
       <Box flex={1} />
+      {/*
       <Hidden smDown>
         <Box pr={3} className={classes.searchRoot}>
           <InputBase placeholder={'Search here...'} inputProps={{ 'aria-label': 'search' }} />
@@ -101,6 +102,7 @@ const Header = () => {
       <Box className={classes.langRoot}>
         <LanguageSwitcher />
       </Box>
+      */}
     </Toolbar>
   );
 };

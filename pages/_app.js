@@ -26,7 +26,7 @@ const MainApp = (props) => {
   return (
     <React.Fragment>
       <Head>
-        <title>Jumbo - Admin Dashboard</title>
+        <title>UpsilonX Dashboard</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <AppContextProvider>

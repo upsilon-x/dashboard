@@ -11,8 +11,8 @@ import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    padding: '30px 16px 12px 16px',
-    borderBottom: (props) => `solid 1px ${props.sidebarTheme.borderColor}`,
+    padding: '8px 16px 12px 16px',
+    //borderBottom: (props) => `solid 1px ${props.sidebarTheme.borderColor}`,
   },
   userInfo: {
     paddingTop: 24,
@@ -61,6 +61,8 @@ const SidebarHeader = () => {
 
   return (
     <div className={classes.root}>
+      <CmtAvatar src={"https://firebasestorage.googleapis.com/v0/b/ethgameservices-dev.appspot.com/o/dashboard%2Fupsx-logo-447.png?alt=media&token=2ed8d5c3-0c7b-455b-a3f3-1b2a721a37cb"} alt="UpsilonX" />
+      {/*
       <CmtAvatar src={'https://via.placeholder.com/150x150'} alt="User Avatar" />
       <div className={classes.userInfo} onClick={handlePopoverOpen}>
         <div
@@ -112,6 +114,7 @@ const SidebarHeader = () => {
           </Paper>
         </Popover>
       )}
+      */}
     </div>
   );
 };
