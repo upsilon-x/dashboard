@@ -4,27 +4,62 @@ import PageContainer from '../../../@jumbo/components/PageComponents/layouts/Pag
 import Box from '@material-ui/core/Box';
 import IntlMessages from '../../../@jumbo/utils/IntlMessages';
 import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
-import SidebarButtons from '../../../@jumbo/components/AppLayout/partials/SideBar/SIdebarButtons';
+import { PostAdd } from '@material-ui/icons';
+import CmtCard from '../../../@coremat/CmtCard';
+import CmtCardHeader from '../../../@coremat/CmtCard/CmtCardHeader';
+import CmtCardContent from '../../../@coremat/CmtCard/CmtCardContent';
+import CmtCardFooter from '../../../@coremat/CmtCard/CmtCardFooter';
+import CmtImage from '../../../@coremat/CmtImage';
+import { Button } from '@material-ui/core';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
   { label: 'Projects', isActive: true },
 ];
 
+// Replace with an id
+const projects = [
+  {
+    name: "Project 1",
+    image: "https://play-lh.googleusercontent.com/10axL9ZMum2LZmCsVutZwvwfx0bkYhB-G7c12Qvl1xDexMYxcqwILCYNgnzzcSDbLrAw=s180-rw",
+    id: 1
+  },
+  {
+    name: "Project 2",
+    image: "https://play-lh.googleusercontent.com/-meRETSTUS8DBtnim75eGwlTPncfiUpR5zAiSl3hu5NnuETVmYA4Fk-vIUBVWdd-ynw=s180-rw",
+    id: 2
+  }
+]
+
 const Projects = () => {
   return (
     <PageContainer heading={<IntlMessages id="pages.projectsPage" />} breadcrumbs={breadcrumbs}>
+      {/*<IntlMessages id="pages.projectsPage.description" />*/}
       <GridContainer>
-        <Grid item xs={12}>
-          <Box>
-            <IntlMessages id="pages.projectsPage.description" />
-          </Box>
-          <Divider />
-          <div style={{ marginTop: 24 }}>
-            <h3>Knowledge Base and Support</h3>
-            <SidebarButtons />
-          </div>
+        {projects.map((x, i) => (
+          <Grid item lg={3} sm={4} xs={6}>
+            <CmtCard>
+              <CmtCardHeader title={x.name}></CmtCardHeader>
+              <CmtCardContent>
+                <CmtImage src={x.image} alt={x.name} />
+                <Button color="primary" size="small" variant="contained" onClick={function () { alert('select!') }}>
+                  <IntlMessages id="sidebar.components.muiComponents.inputs.select" />
+                </Button>
+              </CmtCardContent>
+            </CmtCard>
+          </Grid>
+        ))}
+        <Grid item lg={3} sm={4} xs={6}>
+          <CmtCard>
+            <CmtCardContent>
+              <IntlMessages id="pages.projectsPage.createProject" />
+              <div className='mt-2'>
+                <Button color="primary" variant="contained" size="small" onClick={function () { alert('dab') }}>
+                  <PostAdd />
+                </Button>
+              </div>
+            </CmtCardContent>
+          </CmtCard>
         </Grid>
       </GridContainer>
     </PageContainer>

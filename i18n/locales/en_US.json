@@ -651,6 +651,7 @@
   "appModule.signup": "Sign Up",
   "pages.projectsPage": "Projects",
   "pages.projectsPage.description": "Select your current project & create new ones.",
+  "pages.projectsPage.createProject": "Create New Project",
   "pages.achievementsPage": "Achievements",
   "pages.achievementsPage.description": "Manage your on-chain achievements here.",
   "pages.storePage": "Store Page",
