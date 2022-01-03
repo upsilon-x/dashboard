@@ -17,16 +17,28 @@ import Footer from '../../partials/Footer';
 import defaultContext from "../../../contextProvider/AppContextProvider/defaultContext";
 
 const layoutOptions = {
-    headerType: defaultContext.headerType,
-    footerType: 'fixed',
-    sidebarType: SIDEBAR_TYPE.MINI,
-    isSidebarFixed: defaultContext.isSidebarFixed,
-    isSidebarOpen: false,
-    miniSidebarWidth: 80,
-    layoutStyle: defaultContext.layoutType,
+  headerType: defaultContext.headerType,
+  footerType: 'fixed',
+  sidebarType: SIDEBAR_TYPE.MINI,
+  isSidebarFixed: defaultContext.isSidebarFixed,
+  isSidebarOpen: false,
+  miniSidebarWidth: 80,
+  layoutStyle: defaultContext.layoutType,
 };
 
+/*
+removed footer lol
+
+      footer={
+        <CmtFooter type="static">
+          <Footer />
+        </CmtFooter>
+      }
+
+*/
+
 const VerticalMinimal = ({ className, children }) => {
+  console.log("Options", layoutOptions);
   return (
     <CmtVerticalLayout
       layoutOptions={layoutOptions}
@@ -41,11 +53,6 @@ const VerticalMinimal = ({ className, children }) => {
           <SidebarHeader />
           <SideBar />
         </CmtSidebar>
-      }
-      footer={
-        <CmtFooter type="static">
-          <Footer />
-        </CmtFooter>
       }>
       <CmtContent>
         {children}
