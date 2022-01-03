@@ -1,5 +1,5 @@
 {
-  "sidebar.main": "Principal",
+  "sidebar.manage": "Principal",
   "sidebar.dashboards": "Cuadros de mando",
   "sidebar.dashboard": "Tablero",
   "sidebar.dashboard.misc": "Misc",
@@ -649,8 +649,8 @@
   "signUp.alreadyMember": "Yo ya soy un miembro",
   "appModule.signin": "Registrarse",
   "appModule.signup": "Regístrate",
-  "pages.samplePage": "Página de Ejemplo",
-  "pages.samplePage.description": "Comience a construir su aplicación. Feliz Codificación!",
+  "pages.projectsPage": "Página de Ejemplo",
+  "pages.projectsPage.description": "Comience a construir su aplicación. Feliz Codificación!",
   "mailNotification.title": "Mensajes",
   "appNotification.title": "Notificaciones",
   "mailNotification.message": "¡No hay mensajes nuevos a partir de ahora!",

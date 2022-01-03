@@ -1,5 +1,5 @@
 {
-  "sidebar.main": "主要",
+  "sidebar.manage": "主要",
   "sidebar.dashboards": "仪表板",
   "sidebar.dashboard": "仪表板",
   "sidebar.dashboard.misc": "雜項",
@@ -649,8 +649,8 @@
   "signUp.alreadyMember": "我已经是会员了",
   "appModule.signin": "签到",
   "appModule.signup": "注册",
-  "pages.samplePage": "示例页面",
-  "pages.samplePage.description": "开始构建你的应用。 快乐编码！",
+  "pages.projectsPage": "示例页面",
+  "pages.projectsPage.description": "开始构建你的应用。 快乐编码！",
   "mailNotification.title": "消息",
   "appNotification.title": "通知",
   "mailNotification.message": "目前没有新消息！",

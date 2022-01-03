@@ -1,5 +1,5 @@
 {
-  "sidebar.main": "الأساسية",
+  "sidebar.manage": "الأساسية",
   "sidebar.dashboards": "لوحة القيادة",
   "sidebar.dashboard": "لوحة القيادة",
   "sidebar.dashboard.misc": "افتراضي",
@@ -649,8 +649,8 @@
   "signUp.alreadyMember": "أنا عضو بالفعل",
   "appModule.signin": "تسجيل الدخول",
   "appModule.signup": "سجل",
-  "pages.samplePage": "نموذج الصفحة",
-  "pages.samplePage.description": "ابدأ في إنشاء تطبيقك. سعيد الترميز!",
+  "pages.projectsPage": "نموذج الصفحة",
+  "pages.projectsPage.description": "ابدأ في إنشاء تطبيقك. سعيد الترميز!",
   "mailNotification.title": "رسائل",
   "appNotification.title": "إخطارات",
   "mailNotification.message": "لا رسائل جديدة حتى الآن!",

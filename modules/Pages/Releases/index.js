@@ -9,16 +9,16 @@ import SidebarButtons from '../../../@jumbo/components/AppLayout/partials/SideBa
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
-  { label: 'Sample Page', isActive: true },
+  { label: 'Releases', isActive: true },
 ];
 
-const SamplePage = () => {
+const Releases = () => {
   return (
-    <PageContainer heading={<IntlMessages id="pages.samplePage" />} breadcrumbs={breadcrumbs}>
+    <PageContainer heading={<IntlMessages id="pages.releasesPage" />} breadcrumbs={breadcrumbs}>
       <GridContainer>
         <Grid item xs={12}>
           <Box>
-            <IntlMessages id="pages.samplePage.description" />
+            <IntlMessages id="pages.releasesPage.description" />
           </Box>
           <Divider />
           <div style={{ marginTop: 24 }}>
@@ -31,4 +31,4 @@ const SamplePage = () => {
   );
 };
 
-export default SamplePage;
+export default Releases;
