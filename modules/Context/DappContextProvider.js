@@ -16,13 +16,18 @@ const DappContextProvider = ({ children }) => {
     },
   ]);
   const [selectedProject, setSelectedProject] = useState(0);
+  const [account, setAccount] = useState(null);
+
+
 
   const contextValue = React.useMemo(() => {
     return {
       projects,
       setProjects,
       selectedProject,
-      setSelectedProject
+      setSelectedProject,
+      account,
+      setAccount
     };
   }, [projects]);
 

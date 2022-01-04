@@ -116,7 +116,7 @@ const Header = () => {
 
   // Connect to Wallet
   const { activateBrowserWallet, account } = useEthers()
-  const etherBalance = useEtherBalance(account)
+  const etherBalance = useEtherBalance(account);
 
   return (
     <Toolbar className={classes.root}>

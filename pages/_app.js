@@ -14,6 +14,9 @@ import 'prismjs/themes/prism-okaidia.css';
 import { DAppProvider } from '@usedapp/core'
 
 const config = {
+  multicallAddresses: {
+    "1337": "0x1b9E19D470c6638EBF326191296A654871DA0eAf"
+  }
 }
 
 import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
