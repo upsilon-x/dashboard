@@ -11,6 +11,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'react-notifications/lib/notifications.css';
 import 'prismjs/themes/prism-okaidia.css';
+import { DAppProvider } from '@usedapp/core'
+
+const config = {
+}
 
 import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
 
@@ -30,13 +34,15 @@ const MainApp = (props) => {
         <title>UpsilonX Dashboard</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
-      <AppContextProvider>
-        <DappContextProvider>
-          <AppWrapper>
-            <Component {...pageProps} />
-          </AppWrapper>
-        </DappContextProvider>
-      </AppContextProvider>
+      <DAppProvider config={config}>
+        <AppContextProvider>
+          <DappContextProvider>
+            <AppWrapper>
+              <Component {...pageProps} />
+            </AppWrapper>
+          </DappContextProvider>
+        </AppContextProvider>
+      </DAppProvider>
     </React.Fragment>
   );
 };

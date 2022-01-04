@@ -1,12 +1,15 @@
 import React, { useState, useContext, useEffect } from 'react';
 import SidebarToggleHandler from '../../../../../@coremat/CmtLayouts/Vertical/SidebarToggleHandler';
 import Toolbar from '@material-ui/core/Toolbar';
-import { Box, InputBase, IconButton, Typography } from '@material-ui/core';
+import { Box, InputBase, Button, Typography } from '@material-ui/core';
 import { alpha } from '@material-ui/core/styles';
 import CmtDropdownMenu from '../../../../../@coremat/CmtDropdownMenu';
 import CmtImage from '../../../../../@coremat/CmtImage';
 import DappContext from '../../../../../modules/Context/DappContext';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import { useEtherBalance, useEthers } from '@usedapp/core'
+import { formatEther } from '@ethersproject/units'
+
 //import LanguageSwitcher from '../LanguageSwitcher';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 /*
@@ -88,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const classes = useStyles();
 
+  // Choose Project
   const [actionsList, setActionsList] = useState([]);
   const { projects, selectedProject, setSelectedProject } = useContext(DappContext);
   useEffect(() => {
@@ -110,6 +114,10 @@ const Header = () => {
     setSelectedProject(option.index);
   };
 
+  // Connect to Wallet
+  const { activateBrowserWallet, account } = useEthers()
+  const etherBalance = useEtherBalance(account)
+
   return (
     <Toolbar className={classes.root}>
       <SidebarToggleHandler edge="start" color="inherit" aria-label="menu" />
@@ -128,6 +136,17 @@ const Header = () => {
         />
       </Box>
       <Box flex={1} />
+      <Box>
+        {account == null ?
+          <Button onClick={activateBrowserWallet}>
+            Connect
+          </Button> : <></>
+        }
+        <Typography>
+          {account && <p>Account: {account}</p>}
+          {etherBalance && <p>Balance: {formatEther(etherBalance)}</p>}
+        </Typography>
+      </Box>
 
       {/*
       <Logo ml={2} color="white" />
