@@ -9,6 +9,7 @@ import CmtCardHeader from '../../../@coremat/CmtCard/CmtCardHeader';
 import CmtCardContent from '../../../@coremat/CmtCard/CmtCardContent';
 import CmtImage from '../../../@coremat/CmtImage';
 import { Button } from '@material-ui/core';
+import Link from 'next/link';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -52,9 +53,11 @@ const Projects = () => {
             <CmtCardContent>
               <IntlMessages id="pages.projectsPage.createProject" />
               <div className='mt-2'>
-                <Button color="primary" variant="contained" size="small" onClick={function () { alert('dab') }}>
+                <Link href="projects/create">
+                <Button color="primary" variant="contained" size="small" >
                   <PostAdd />
                 </Button>
+                </Link>
               </div>
             </CmtCardContent>
           </CmtCard>
