@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import { wrapper } from '../redux/store/index';
 import AppWrapper from '../@jumbo/components/AppWrapper';
+import DappContextProvider from '../modules/Context/DappContextProvider';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'slick-carousel/slick/slick.css';
@@ -30,9 +31,11 @@ const MainApp = (props) => {
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <AppContextProvider>
-        <AppWrapper>
-          <Component {...pageProps} />
-        </AppWrapper>
+        <DappContextProvider>
+          <AppWrapper>
+            <Component {...pageProps} />
+          </AppWrapper>
+        </DappContextProvider>
       </AppContextProvider>
     </React.Fragment>
   );
