@@ -1,13 +1,13 @@
 import firebase from 'firebase';
 
 // Initialize Firebase
-const config = {
-  apiKey: 'AIzaSyCYaTKjfam_qMXDnGfcdnBxScEq89VQtLk',
-  authDomain: 'curious-sandbox-196209.firebaseapp.com',
-  databaseURL: 'https://curious-sandbox-196209.firebaseio.com',
-  projectId: 'curious-sandbox-196209',
-  storageBucket: '',
-  messagingSenderId: '1034032747860',
+const firebaseConfig = { // ethgameservices-dev
+  apiKey: "AIzaSyC4yAASjJTw0EaYZEntc4bbmgnT77d2Pec",
+  authDomain: "ethgameservices-dev.firebaseapp.com",
+  projectId: "ethgameservices-dev",
+  storageBucket: "ethgameservices-dev.appspot.com",
+  messagingSenderId: "270414835613",
+  appId: "1:270414835613:web:e5ad7943810100ad560974"
 };
 
 if (!firebase.apps.length) {
