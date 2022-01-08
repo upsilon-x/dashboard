@@ -9,6 +9,7 @@ import DappContext from '../../../../../modules/Context/DappContext';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useEtherBalance, useEthers } from '@usedapp/core'
 import { formatEther } from '@ethersproject/units'
+import useSignInWithMetamask from '../../../../../authentication/auth-methods/firebase-auth/useSignInWithMetamask';
 
 //import LanguageSwitcher from '../LanguageSwitcher';
 import makeStyles from '@material-ui/core/styles/makeStyles';
@@ -118,6 +119,7 @@ const Header = () => {
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account);
   // TODO: Add useEffect to account so that when account changes, check for authentication & log out
+  const authState = useSignInWithMetamask(account);
 
   return (
     <Toolbar className={classes.root}>
