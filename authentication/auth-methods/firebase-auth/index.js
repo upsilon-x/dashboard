@@ -8,6 +8,9 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import GTranslateIcon from '@material-ui/icons/GTranslate';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+// NOTE: so you know how we bought this framework? Yeah I'm not using it.
+//         All that firebase stuff is in app lol
+
 const useStyles = makeStyles((theme) => ({
   iconBtn: {
     '&:hover, &:focus': {

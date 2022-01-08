@@ -56,11 +56,11 @@ export default function useSignInWithMetamask(address) {
           address: address,
           signature: sig
         })
-      })/*
+      })
       .then(async (response) => {
         // then sign in with custom token
-        //await signInWithCustomToken(this.auth, response.token);
-      })*/
+        await firebase.auth().signInWithCustomToken(response.token);
+      })
     });
 
     // 2 Sign nonce

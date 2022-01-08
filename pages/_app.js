@@ -11,7 +11,8 @@ import 'slick-carousel/slick/slick-theme.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'react-notifications/lib/notifications.css';
 import 'prismjs/themes/prism-okaidia.css';
-import { DAppProvider } from '@usedapp/core'
+import { DAppProvider } from '@usedapp/core';
+import firebase from 'firebase';
 
 const config = {
   multicallAddresses: {
@@ -20,6 +21,17 @@ const config = {
 }
 
 import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
+
+
+const firebaseConfig = { // ethgameservices-dev
+  apiKey: "AIzaSyC4yAASjJTw0EaYZEntc4bbmgnT77d2Pec",
+  authDomain: "ethgameservices-dev.firebaseapp.com",
+  projectId: "ethgameservices-dev",
+  storageBucket: "ethgameservices-dev.appspot.com",
+  messagingSenderId: "270414835613",
+  appId: "1:270414835613:web:e5ad7943810100ad560974"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
