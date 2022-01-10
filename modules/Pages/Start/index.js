@@ -6,6 +6,7 @@ import IntlMessages from '../../../@jumbo/utils/IntlMessages';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import { useAuth } from "../../../authentication";
+import { useEthers } from '@usedapp/core'
 
 const breadcrumbs = [
   { label: 'Home', isActive: true }
@@ -14,7 +15,12 @@ const breadcrumbs = [
 const StartPage = () => {
 
   let { authUser, isLoading, userSignOut } = useAuth();
-  console.log(authUser);
+  let { activateBrowserWallet, deactivate } = useEthers();
+
+  const resetAccountAuthentication = async () => {
+    await deactivate();
+    activateBrowserWallet();
+  }
 
   return (
     <PageContainer heading={<IntlMessages id="pages.startPage" />} breadcrumbs={breadcrumbs}>
@@ -30,6 +36,7 @@ const StartPage = () => {
             {authUser === false && isLoading == false ?
               <>
                 <div>You may not have authenticated yet. Please connect.</div>
+                <Button onClick={resetAccountAuthentication}>Metamask Authenticate</Button>
               </>
               : authUser === true ?
                 <>
