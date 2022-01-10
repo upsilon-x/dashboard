@@ -59,7 +59,7 @@ const Projects = () => {
 
   return (
     <PageContainer heading={<IntlMessages id="pages.projectsPage.createProject" />} breadcrumbs={breadcrumbs}>
-      <TransactionSnackbar state={state} />
+      {/*<TransactionSnackbar state={state} />*/}
       <GridContainer>
         <Grid item xs={12}>
           <IntlMessages id="pages.projectsPage.create.description" />

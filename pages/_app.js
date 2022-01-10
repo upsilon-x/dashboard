@@ -12,7 +12,8 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'react-notifications/lib/notifications.css';
 import 'prismjs/themes/prism-okaidia.css';
 import { DAppProvider } from '@usedapp/core';
-import firebase from 'firebase';
+import { AuthProvider } from '../authentication';
+import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
 
 const config = {
   multicallAddresses: {
@@ -20,20 +21,6 @@ const config = {
   }
 }
 
-import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
-
-// NOTE:  This is all of the firebase setup stuff. 
-//        We will eventually move it out of here, but for now it stays in this file.
-const firebaseConfig = { // ethgameservices-dev
-  apiKey: "AIzaSyC4yAASjJTw0EaYZEntc4bbmgnT77d2Pec",
-  authDomain: "ethgameservices-dev.firebaseapp.com",
-  projectId: "ethgameservices-dev",
-  storageBucket: "ethgameservices-dev.appspot.com",
-  messagingSenderId: "270414835613",
-  appId: "1:270414835613:web:e5ad7943810100ad560974"
-};
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-if (process.env.NODE_ENV == "development") firebase.auth().useEmulator("http://localhost:9099");
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
@@ -54,9 +41,11 @@ const MainApp = (props) => {
       <DAppProvider config={config}>
         <AppContextProvider>
           <DappContextProvider>
-            <AppWrapper>
-              <Component {...pageProps} />
-            </AppWrapper>
+            <AuthProvider>
+              <AppWrapper>
+                <Component {...pageProps} />
+              </AppWrapper>
+            </AuthProvider>
           </DappContextProvider>
         </AppContextProvider>
       </DAppProvider>

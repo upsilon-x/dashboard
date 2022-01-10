@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { useProvideAuth } from './auth-methods/basic-auth';
+import { useProvideAuth } from './auth-methods/firebase-auth';
 
 const authContext = createContext();
 // Provider component that wraps your app and makes auth object ..
@@ -7,6 +7,7 @@ const authContext = createContext();
 
 export function AuthProvider({ children }) {
   const auth = useProvideAuth();
+  console.log(auth);
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 

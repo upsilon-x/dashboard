@@ -20,7 +20,8 @@ export default function useSignInWithMetamask(address) {
 
   useEffect(x => {
     let user = firebase.auth().currentUser;
-    let addressIsAuthenticated = user != null && user.uid.toLowerCase() == address.toLowerCase();
+    let addressIsAuthenticated = user != null && address != null && user.uid.toLowerCase() == address.toLowerCase();
+    console.log("Authentication Status", user, addressIsAuthenticated);
 
     let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
     

@@ -11,10 +11,11 @@ const firebaseConfig = { // ethgameservices-dev
 };
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(config);
+  firebase.initializeApp(firebaseConfig);
 }
 
 const auth = firebase.auth();
+if (process.env.NODE_ENV == "development") auth.useEmulator("http://localhost:9099");
 
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();

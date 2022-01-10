@@ -119,7 +119,7 @@ const Header = () => {
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account);
   // TODO: Add useEffect to account so that when account changes, check for authentication & log out
-  const authState = useSignInWithMetamask(account);
+  //const authState = useSignInWithMetamask(account);
 
   return (
     <Toolbar className={classes.root}>
