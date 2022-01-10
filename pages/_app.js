@@ -40,16 +40,16 @@ const MainApp = (props) => {
       </Head>
       <DAppProvider config={config}>
         <AppContextProvider>
-          <DappContextProvider>
-            <AuthProvider>
+          <AuthProvider>
+            <DappContextProvider>
               <AppWrapper>
                 <Component {...pageProps} />
               </AppWrapper>
-            </AuthProvider>
-          </DappContextProvider>
+            </DappContextProvider>
+          </AuthProvider>
         </AppContextProvider>
       </DAppProvider>
-    </React.Fragment>
+    </React.Fragment >
   );
 };
 

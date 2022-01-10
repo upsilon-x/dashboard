@@ -13,7 +13,7 @@ const breadcrumbs = [
 
 const StartPage = () => {
 
-  let { authUser, isLoading } = useAuth();
+  let { authUser, isLoading, userSignOut } = useAuth();
   console.log(authUser);
 
   return (
@@ -27,21 +27,20 @@ const StartPage = () => {
         </Grid>
         <Grid item xs={6}>
           <Box>
-            {authUser == null && isLoading == false ?
+            {authUser === false && isLoading == false ?
               <>
                 <div>You may not have authenticated yet. Please connect.</div>
-                <Button></Button>
               </>
-              : authUser != null ?
+              : authUser === true ?
                 <>
                   <div>You are authenticated!</div>
+                  <Button onClick={() => { userSignOut(false); }}>Log Out</Button>
                 </>
                 :
                 <>
                   <div>Loading...</div>
                 </>
             }
-
           </Box>
         </Grid>
         <Grid item xs={6}>

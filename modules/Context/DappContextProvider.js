@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import useSignInWithMetamask from '../../authentication/auth-methods/firebase-auth/useSignInWithMetamask';
 import DappContext from './DappContext';
+import { useEthers } from '@usedapp/core'
 
 const DappContextProvider = ({ children }) => {
   // TODO: remove default values
@@ -16,7 +18,7 @@ const DappContextProvider = ({ children }) => {
     },
   ]);
   const [selectedProject, setSelectedProject] = useState(0);
-  const [account, setAccount] = useState(null);
+  useSignInWithMetamask();
 
 
 
@@ -25,9 +27,7 @@ const DappContextProvider = ({ children }) => {
       projects,
       setProjects,
       selectedProject,
-      setSelectedProject,
-      account,
-      setAccount
+      setSelectedProject
     };
   }, [projects]);
 

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../index';
 import firebase from "firebase";
 import ENV_VAR from "../../../ENV_VAR.json";
+import { useEthers } from '@usedapp/core'
 
 //  Adapted from this:
 //  https://eliteionic.com/tutorials/creating-web3-login-with-ethereum-metamask-firebase-auth/
@@ -15,22 +17,20 @@ import ENV_VAR from "../../../ENV_VAR.json";
  *      Ask for nonce token from server, which checks if it has been signed
  *      Authenticate
  */
-export default function useSignInWithMetamask(address) {
-  const [authState, setAuthState] = useState(false);
+export default function useSignInWithMetamask() {
+  const { authUser, userSignOut } = useAuth();
+  const { account } = useEthers();
 
   useEffect(x => {
     let user = firebase.auth().currentUser;
-    let addressIsAuthenticated = user != null && address != null && user.uid.toLowerCase() == address.toLowerCase();
-    console.log("Authentication Status", user, addressIsAuthenticated);
-
+    let addressIsAuthenticated = user != null && account != null && user.uid.toLowerCase() == account.toLowerCase();
     let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
-    
 
-    if (address == null && addressIsAuthenticated) {
-      firebase.auth().signOut();
+
+    if (account == null && authUser) {
+      userSignOut();
     }
-    else if (address != null && !addressIsAuthenticated) {
-      setAuthState(false);
+    else if (account != null && !addressIsAuthenticated) {
       // 1 Ask for nonce
       fetch(`${functionsURL}/getNonceToSign`, {
         method: 'POST',
@@ -39,7 +39,7 @@ export default function useSignInWithMetamask(address) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          address: address
+          address: account
         })
       })
         .then((response) => response.json())
@@ -49,7 +49,7 @@ export default function useSignInWithMetamask(address) {
           method: 'personal_sign',
           params: [
             `0x${toHex(response.nonce)}`,
-            address
+            account
           ]
         }))
         .then((sig) => {
@@ -61,7 +61,7 @@ export default function useSignInWithMetamask(address) {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              address: address,
+              address: account,
               signature: sig
             })
           })
@@ -72,16 +72,15 @@ export default function useSignInWithMetamask(address) {
             .then((response) => {
               console.log(response);
               if (response != null) {
-                setAuthState(true);
+                // yay it finished
               }
             })
         });
     }
 
-  }, [address]);
+  }, [account, authUser]);
 
-
-  return authState;
+  return authUser;
 }
 
 function toHex(stringToConvert) {

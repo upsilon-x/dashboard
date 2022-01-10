@@ -25,6 +25,10 @@ export const useProvideAuth = () => {
   const [isLoading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  auth.onAuthStateChanged(x => {
+    setAuthUser(x != null);
+  });
+
   const fetchStart = () => {
     setLoading(true);
     setError('');
@@ -63,7 +67,7 @@ export const useProvideAuth = () => {
         .signInWithPopup(authProvider)
         .then((response) => {
           fetchSuccess();
-          setAuthUser(response.user);
+          //setAuthUser(response.user);
           if (callbackFun) callbackFun();
           return response.user;
         })
@@ -109,7 +113,7 @@ export const useProvideAuth = () => {
         .signInWithEmailAndPassword(email, password)
         .then((response) => {
           fetchSuccess();
-          setAuthUser(response.user);
+          //setAuthUser(response.user);
           if (callbackFun) callbackFun();
           return response.user;
         })
@@ -130,7 +134,7 @@ export const useProvideAuth = () => {
         .createUserWithEmailAndPassword(email, password)
         .then((response) => {
           fetchSuccess();
-          setAuthUser(response.user);
+          //setAuthUser(response.user);
           if (callbackFun) callbackFun();
           return response.user;
         })
@@ -144,7 +148,7 @@ export const useProvideAuth = () => {
 
   const userSignOut = (callbackFun) => {
     return auth.signOut().then(() => {
-      setAuthUser(false);
+      //setAuthUser(false);
       if (callbackFun) callbackFun();
     });
   };
@@ -227,6 +231,8 @@ export const useProvideAuth = () => {
     isLoading,
     authUser,
     error,
+
+    // Basically don't use any of these
     setError,
     setAuthUser,
     getAuthUser,

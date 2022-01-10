@@ -2,6 +2,8 @@ import React from 'react';
 import { PostAdd, Storefront, EmojiEvents, NewReleases } from '@material-ui/icons';
 import IntlMessages from '../../../utils/IntlMessages';
 
+// TODO: change the sidebar
+
 export const sidebarNavs = [
   {
     name: <IntlMessages id={'pages.projectsPage'} />,
