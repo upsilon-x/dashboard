@@ -1,0 +1,11 @@
+{
+    "development": {
+        "functions": "http://localhost:5001/ethgameservices-dev/us-central1"
+    },
+    "staging": {
+        "functions": "https://us-central1-ethgameservices-dev.cloudfunctions.net"
+    },
+    "production": {
+        "functions": "https://us-central1-ethgameservices-prod.cloudfunctions.net"
+    }
+}

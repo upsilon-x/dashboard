@@ -22,7 +22,8 @@ const config = {
 
 import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
 
-
+// NOTE:  This is all of the firebase setup stuff. 
+//        We will eventually move it out of here, but for now it stays in this file.
 const firebaseConfig = { // ethgameservices-dev
   apiKey: "AIzaSyC4yAASjJTw0EaYZEntc4bbmgnT77d2Pec",
   authDomain: "ethgameservices-dev.firebaseapp.com",
@@ -32,6 +33,7 @@ const firebaseConfig = { // ethgameservices-dev
   appId: "1:270414835613:web:e5ad7943810100ad560974"
 };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+if (process.env.NODE_ENV == "development") firebase.auth().useEmulator("http://localhost:9099");
 
 const MainApp = (props) => {
   const { Component, pageProps } = props;
