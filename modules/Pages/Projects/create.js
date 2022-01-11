@@ -10,8 +10,10 @@ import TransactionSnackbar from '../../Components/TransactionSnackbar';
 import { useContractFunction } from '@usedapp/core';
 import { utils } from 'ethers'
 import { Contract } from '@ethersproject/contracts'
-import contracts from '../../Context/Contracts';
+import contracts, { chainIdToName } from '../../Context/Contracts';
 import { useEthers } from '@usedapp/core'
+import ENV_VAR from "../../../ENV_VAR.json";
+import firebase from 'firebase';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -19,31 +21,64 @@ const breadcrumbs = [
   { label: 'Create', isActive: true },
 ];
 
-const wethInterface = new utils.Interface(contracts.ropsten.projectNFT.abi);
-const wethContractAddress = contracts.ropsten.projectNFT.address;
-const contract = new Contract(wethContractAddress, wethInterface);
-
 const Projects = () => {
 
-  const [waiting, setWaiting] = useState(false);
+  const { account, chainId } = useEthers();
+  const wethInterface = new utils.Interface(contracts[chainIdToName(chainId)].projectNFT.abi);
+  const wethContractAddress = contracts[chainIdToName(chainId)].projectNFT.address;
+  const contract = new Contract(wethContractAddress, wethInterface);
   const { send, state } = useContractFunction(contract, 'mintProject', { transactionName: 'Wrap' });
-  const { account } = useEthers();
+
+  // Form
+  const [projectName, setProjectName] = useState("");
+  const [waiting, setWaiting] = useState(false);
+  const [mintStatus, setMintStatus] = useState("");
 
   // 1. Make blockchain request
-  async function mintProject(e) {
+  function mintProject(e) {
     // waiting visual ...
     setWaiting(true);
     // This will activate the useEffect below
     send(account);
+    setMintStatus("Minting NFT via smart contract.")
   }
 
   // 2. Receive blockchain result
   useEffect(() => {
     console.log(state);
     if (state.status == "Success") {
-      let num = state.receipt.events[0].args.tokenId;
-      alert("TokenId: " + num);
-      setWaiting(false);
+      let nftNum = state.receipt.events[0].args.tokenId.toNumber();
+      console.log(nftNum);
+
+      // 3. Send firebase API request
+      setMintStatus("Writing to database.");
+      let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
+
+      // 4. Recieve firebase API request
+      firebase.auth().currentUser.getIdToken()
+      // TODO: add upload photo
+      .then(token => {
+        console.log("Starting post", projectName, nftNum, chainId);
+        return fetch(`${functionsURL}/mintProject`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': token
+          },
+          body: JSON.stringify({
+            image: "https://lumiere-a.akamaihd.net/v1/images/ct_belle_upcportalreskin_20694_e5816813.jpeg?region=0%2C0%2C330%2C330",
+            name: projectName,
+            nftId: nftNum,
+            chainId: chainId
+          })
+        })
+      })
+      .then(response => {
+        console.log(response);
+        setWaiting(false);
+      })
+      // TODO: query then update projects in context
     }
     else if (state.status == "Failed" || state.status == "Exception") {
       alert("Oh no! There was an error!");
@@ -51,10 +86,6 @@ const Projects = () => {
     }
   }, [state]);
 
-  // 3. Send firebase API request
-
-
-  // 4. Recieve firebase API request
 
 
   return (
@@ -69,12 +100,12 @@ const Projects = () => {
             <CmtCardContent>
               <IntlMessages id="pages.projectsPage.createProject" />
               {waiting ?
-                <div>we're waiting yo</div>
+                <div>Project is being created. Status: {mintStatus}</div>
                 :
                 <div className='mt-2'>
                   <div>
                     <InputLabel htmlfor="proj-name">Project Name</InputLabel>
-                    <Input id="proj-name"></Input>
+                    <Input id="proj-name" onChange={e => { setProjectName(e.target.value) }}></Input>
                     <InputLabel htmlfor="proj-icon">Project Icon</InputLabel>
                     <Input id="proj-icon"></Input>
                   </div>
