@@ -28,10 +28,8 @@ export default function useSignInWithMetamask() {
   const { authUser, userSignOut } = useAuth();
   const { account } = useEthers();
 
-  // TODO:  Add some checks to make sure that there isn't already a pending signature. 
-  //        Asks too many times. Maybe a race condition is made?
-
   useEffect(x => {
+    console.log("signInWithMetamask change:", account, authUser);
     let user = firebase.auth().currentUser;
     let addressIsAuthenticated = user != null && account != null && user.uid.toLowerCase() == account.toLowerCase();
     let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
@@ -40,7 +38,7 @@ export default function useSignInWithMetamask() {
     if (account == null && authUser) {
       userSignOut(); // firebase.auth().signOut()
     }
-    else if (account != null && !addressIsAuthenticated) {
+    else if (account != null && !addressIsAuthenticated && authUser === false) {
       // 1 Ask for nonce
       fetch(`${functionsURL}/getNonceToSign`, {
         method: 'POST',
