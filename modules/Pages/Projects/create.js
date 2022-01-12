@@ -31,11 +31,18 @@ const Projects = () => {
 
   // Form
   const [projectName, setProjectName] = useState("");
+  const [imagePath, setFilePath] = useState("");
   const [waiting, setWaiting] = useState(false);
   const [mintStatus, setMintStatus] = useState("");
+  function handleImageAsFile(e) {
+    e.preventDefault();
+    setFilePath(e.target.files[0]);
+  } 
 
   // 1. Make blockchain request
   function mintProject(e) {
+    // TODO: add form validation
+
     // waiting visual ...
     setWaiting(true);
     // This will activate the useEffect below
@@ -56,8 +63,16 @@ const Projects = () => {
 
       // 4. Recieve firebase API request
       firebase.auth().currentUser.getIdToken()
-      // TODO: add upload photo
-      .then(token => {
+      .then(async token => {
+        // Upload photo
+        const rand = Math.floor(Math.random() * 100000000000);
+        const uploadTask = firebase.storage().ref(`/images/${account}/${rand}-${imagePath.name}/`).put(imagePath);
+        const imageURL = await new Promise(function(resolve, reject) {
+          uploadTask.on('state_changed', function(snapshot) {}, function error(err) { reject() }, function complete() {
+            uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => resolve(downloadURL));
+          });
+        });
+
         console.log("Starting post", projectName, nftNum, chainId);
         return fetch(`${functionsURL}/mintProject`, {
           method: 'POST',
@@ -67,7 +82,7 @@ const Projects = () => {
             'Authorization': token
           },
           body: JSON.stringify({
-            image: "https://lumiere-a.akamaihd.net/v1/images/ct_belle_upcportalreskin_20694_e5816813.jpeg?region=0%2C0%2C330%2C330",
+            image: imageURL,
             name: projectName,
             nftId: nftNum,
             chainId: chainId
@@ -103,14 +118,13 @@ const Projects = () => {
                 <div>Project is being created. Status: {mintStatus}</div>
                 :
                 <div className='mt-2'>
-                  <div>
+                  <div className='mb-2'>
                     <InputLabel htmlfor="proj-name">Project Name</InputLabel>
                     <Input id="proj-name" onChange={e => { setProjectName(e.target.value) }}></Input>
-                    <InputLabel htmlfor="proj-icon">Project Icon</InputLabel>
-                    <Input id="proj-icon"></Input>
+                    <Input type="file" id="proj-icon" onChange={handleImageAsFile}></Input>
                   </div>
                   <Button color="primary" variant="contained" size="small" onClick={mintProject}>
-                    Create Project lol
+                    Create Project
                   </Button>
                 </div>
               }

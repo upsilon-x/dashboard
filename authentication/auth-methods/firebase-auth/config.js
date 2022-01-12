@@ -15,7 +15,11 @@ if (!firebase.apps.length) {
 }
 
 const auth = firebase.auth();
-if (process.env.NODE_ENV == "development") auth.useEmulator("http://localhost:9099");
+if (process.env.NODE_ENV == "development") {
+  auth.useEmulator("http://localhost:9099");
+  const storage = firebase.storage();
+  storage.useEmulator("localhost", 9199);
+}
 
 const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 const facebookAuthProvider = new firebase.auth.FacebookAuthProvider();
