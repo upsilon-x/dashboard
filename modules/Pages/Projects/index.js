@@ -18,7 +18,7 @@ const breadcrumbs = [
 ];
 
 const Projects = () => {
-  const { projects } = useContext(DappContext);
+  const { projects, setSelectedProject } = useContext(DappContext);
 
   return (
     <PageContainer heading={<IntlMessages id="pages.projectsPage" />} breadcrumbs={breadcrumbs}>
@@ -30,7 +30,7 @@ const Projects = () => {
               <CmtCardHeader title={x.name}></CmtCardHeader>
               <CmtCardContent>
                 <CmtImage src={x.imageURL} alt={x.name} />
-                <Button color="primary" size="small" variant="contained" onClick={function () { alert('select!') }}>
+                <Button color="primary" size="small" variant="contained" onClick={function () { setSelectedProject(i); }}>
                   <IntlMessages id="sidebar.components.muiComponents.inputs.select" />
                 </Button>
               </CmtCardContent>
