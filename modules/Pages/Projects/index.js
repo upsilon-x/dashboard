@@ -29,7 +29,7 @@ const Projects = () => {
             <CmtCard>
               <CmtCardHeader title={x.name}></CmtCardHeader>
               <CmtCardContent>
-                <CmtImage src={x.image} alt={x.name} />
+                <CmtImage src={x.imageURL} alt={x.name} />
                 <Button color="primary" size="small" variant="contained" onClick={function () { alert('select!') }}>
                   <IntlMessages id="sidebar.components.muiComponents.inputs.select" />
                 </Button>

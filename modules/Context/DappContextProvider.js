@@ -1,24 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import useSignInWithMetamask from '../../authentication/auth-methods/firebase-auth/useSignInWithMetamask';
 import DappContext from './DappContext';
-import { useEthers } from '@usedapp/core'
+import { useAuth } from '../../authentication';
+import { useEthers, useContractFunction } from '@usedapp/core';
+import firebase from 'firebase';
+import ENV_VAR from "../../ENV_VAR.json";
 
 const DappContextProvider = ({ children }) => {
-  // TODO: remove default values
-  const [projects, setProjects] = useState([
-    {
-      id: 0,
-      name: 'Project 1',
-      image: 'https://play-lh.googleusercontent.com/10axL9ZMum2LZmCsVutZwvwfx0bkYhB-G7c12Qvl1xDexMYxcqwILCYNgnzzcSDbLrAw=s180-rw'
-    },    
-    {
-      id: 1,
-      name: 'Project 2',
-      image: 'https://play-lh.googleusercontent.com/-meRETSTUS8DBtnim75eGwlTPncfiUpR5zAiSl3hu5NnuETVmYA4Fk-vIUBVWdd-ynw=s180-rw'
-    },
-  ]);
+  const [projects, setProjects] = useState();
   const [selectedProject, setSelectedProject] = useState(0);
   useSignInWithMetamask();
+
+  // Project Status Check
+  const { account, chainId } = useEthers();
+  // 1. Query blockchain (get the 10 most recent projects)
+  useEffect(x => {
+    if (account != null && chainId != null) {
+      let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
+      fetch(`${functionsURL}/getProjects`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          chainId: chainId,
+          address: account
+        })
+      })
+      .then((response) => response.json())
+      .then(response => {
+        setProjects(response);
+        if(response.length > 0) setSelectedProject(0);
+      })
+    }
+  }, [account, chainId]);
 
 
 

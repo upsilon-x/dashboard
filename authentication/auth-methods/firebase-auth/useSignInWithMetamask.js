@@ -18,7 +18,7 @@ import { useEthers } from '@usedapp/core'
  *      Authenticate
  */
 export default function useSignInWithMetamask() {
-  /**
+  /** replace line below
     const [authUser, setAuthUser] = useState(false);
     // put this out of the function I think
     firebase.auth().onAuthStateChanged(x => {
@@ -29,12 +29,10 @@ export default function useSignInWithMetamask() {
   const { account } = useEthers();
 
   useEffect(x => {
-    console.log("signInWithMetamask change:", account, authUser);
     let user = firebase.auth().currentUser;
     let addressIsAuthenticated = user != null && account != null && user.uid.toLowerCase() == account.toLowerCase();
     let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
 
-    console.log("signInWithMetamask", account, authUser, user, addressIsAuthenticated);
     if (account == null && authUser) {
       userSignOut(); // firebase.auth().signOut()
     }

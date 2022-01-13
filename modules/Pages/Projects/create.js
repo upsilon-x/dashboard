@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import GridContainer from '../../../@jumbo/components/GridContainer';
 import PageContainer from '../../../@jumbo/components/PageComponents/layouts/PageContainer';
 import IntlMessages from '../../../@jumbo/utils/IntlMessages';
@@ -14,6 +14,7 @@ import contracts, { chainIdToName } from '../../Context/Contracts';
 import { useEthers } from '@usedapp/core'
 import ENV_VAR from "../../../ENV_VAR.json";
 import firebase from 'firebase';
+import DappContext from "../../Context/DappContext";
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -24,10 +25,13 @@ const breadcrumbs = [
 const Projects = () => {
 
   const { account, chainId } = useEthers();
-  const wethInterface = new utils.Interface(contracts[chainIdToName(chainId)].projectNFT.abi);
-  const wethContractAddress = contracts[chainIdToName(chainId)].projectNFT.address;
-  const contract = new Contract(wethContractAddress, wethInterface);
+  const contractInterface = new utils.Interface(contracts.projectNFT.abi);
+  const contractAddress = contracts.projectNFT[chainIdToName(chainId)] ?? "0x0000000000000000000000000000000000000000";;
+  const contract = new Contract(contractAddress, contractInterface);
   const { send, state } = useContractFunction(contract, 'mintProject', { transactionName: 'Wrap' });
+
+  const { projects, setProjects } = useContext(DappContext);
+  const [ newProject, setNewProject ] = useState(null);
 
   // Form
   const [projectName, setProjectName] = useState("");
@@ -58,7 +62,7 @@ const Projects = () => {
       console.log(nftNum);
 
       // 3. Send firebase API request
-      setMintStatus("Writing to database.");
+      setMintStatus("Uploading & writing to database.");
       let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
 
       // 4. Recieve firebase API request
@@ -71,6 +75,13 @@ const Projects = () => {
           uploadTask.on('state_changed', function(snapshot) {}, function error(err) { reject() }, function complete() {
             uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => resolve(downloadURL));
           });
+        });
+
+        setNewProject({
+          nftId: nftNum,
+          chainId: chainId,
+          name: projectName,
+          imageURL: imageURL,
         });
 
         console.log("Starting post", projectName, nftNum, chainId);
@@ -90,10 +101,13 @@ const Projects = () => {
         })
       })
       .then(response => {
-        console.log(response);
         setWaiting(false);
+
+        // Add to projects
+        console.log(newProject);
+        if(projects == null) setProjects([newProject]);
+        else setProjects(projects.push(newProject));
       })
-      // TODO: query then update projects in context
     }
     else if (state.status == "Failed" || state.status == "Exception") {
       alert("Oh no! There was an error!");

@@ -96,16 +96,20 @@ const Header = () => {
   const { projects, selectedProject, setSelectedProject } = useContext(DappContext);
   useEffect(() => {
     let aL = [];
-    projects.forEach((x, index) => {
+    projects?.forEach((x, index) => {
+      console.log(x);
       aL.push({
-        icon: <CmtImage src={x.image} height="30px" width="30px" className="mr-2" />,
+        icon: <CmtImage src={x.imageURL} height="30px" width="30px" className="mr-2" />,
         label: x.name,
-        image: x.image,
+        image: x.imageURL,
         index: index
       });
     });
-    setActionsList(aL);
-    setActiveOption(aL[selectedProject]);
+
+    if(aL.length > 0) {
+      setActionsList(aL);
+      setActiveOption(aL[selectedProject]);
+    }
   }, [projects]);
   const [activeOption, setActiveOption] = useState();
 
@@ -117,11 +121,11 @@ const Header = () => {
   // Connect to Wallet
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account);
-  // TODO: Add useEffect to account so that when account changes, check for authentication & log out
 
   return (
     <Toolbar className={classes.root}>
       <SidebarToggleHandler edge="start" color="inherit" aria-label="menu" />
+      {actionsList.length > 0 ?
       <Box display="flex" flexDirection='row' mt='unset'>
         <CmtImage
           src={activeOption?.image}
@@ -135,7 +139,8 @@ const Header = () => {
           TriggerComponent={<KeyboardArrowDownIcon />}
           items={actionsList}
         />
-      </Box>
+      </Box> : <></>
+      }
       <Box flex={1} />
       <Box>
         {account == null ?
