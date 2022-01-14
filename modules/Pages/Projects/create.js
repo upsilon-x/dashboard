@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import GridContainer from '../../../@jumbo/components/GridContainer';
 import PageContainer from '../../../@jumbo/components/PageComponents/layouts/PageContainer';
 import IntlMessages from '../../../@jumbo/utils/IntlMessages';
@@ -34,7 +34,7 @@ const Projects = () => {
   const [ newProject, setNewProject ] = useState(null);
 
   // Form
-  const [projectName, setProjectName] = useState("");
+  const projectName = useRef("");
   const [imagePath, setFilePath] = useState("");
   const [waiting, setWaiting] = useState(false);
   const [mintStatus, setMintStatus] = useState("");
@@ -134,7 +134,7 @@ const Projects = () => {
                 <div className='mt-2'>
                   <div className='mb-2'>
                     <InputLabel htmlfor="proj-name">Project Name</InputLabel>
-                    <Input id="proj-name" onChange={e => { setProjectName(e.target.value) }}></Input>
+                    <Input id="proj-name" ref={projectName}></Input>
                     <Input type="file" id="proj-icon" onChange={handleImageAsFile}></Input>
                   </div>
                   <Button color="primary" variant="contained" size="small" onClick={mintProject}>
