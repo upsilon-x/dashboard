@@ -37,6 +37,7 @@ const StartPage = () => {
               <>
                 <div>You may not have authenticated yet. Please connect.</div>
                 <Button onClick={resetAccountAuthentication}>Metamask Authenticate</Button>
+                <Button onClick={() => {deactivate()}}>Wallet Disconnect</Button>
               </>
               : authUser === true ?
                 <>

@@ -38,7 +38,7 @@ removed footer lol
 */
 
 const VerticalMinimal = ({ className, children }) => {
-  console.log("Options", layoutOptions);
+  //console.log("Options", layoutOptions);
   return (
     <CmtVerticalLayout
       layoutOptions={layoutOptions}

@@ -14,11 +14,14 @@ import 'prismjs/themes/prism-okaidia.css';
 import { DAppProvider } from '@usedapp/core';
 import { AuthProvider } from '../authentication';
 import AppContextProvider from '../@jumbo/components/contextProvider/AppContextProvider';
+import contracts from "../modules/Context/Contracts";
 
 const config = {
-  multicallAddresses: {
-    "1337": "0x1b9E19D470c6638EBF326191296A654871DA0eAf"
-  }
+  multicallAddresses: {}
+}
+if(process.env.NODE_ENV == "development") {
+  config.multicallAddresses["1337"] = contracts.UpdatedMulticall.development;
+  console.log("muticall set", config);
 }
 
 

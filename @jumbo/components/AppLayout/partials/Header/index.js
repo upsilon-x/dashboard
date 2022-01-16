@@ -98,12 +98,15 @@ const Header = () => {
     let aL = [];
     projects?.forEach((x, index) => {
       console.log(x);
-      aL.push({
-        icon: <CmtImage src={x.imageURL} height="30px" width="30px" className="mr-2" />,
-        label: x.name,
-        image: x.imageURL,
-        index: index
-      });
+      try {
+        aL.push({
+          icon: <CmtImage src={x.imageURL} height="30px" width="30px" className="mr-2" />,
+          label: x.name,
+          image: x.imageURL,
+          index: index
+        });
+      }
+      catch {}
     });
 
     if(aL.length > 0) {
@@ -121,6 +124,8 @@ const Header = () => {
   // Connect to Wallet
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account);
+  console.log("Account: " + account);
+  console.log("Ether Balance: " + etherBalance);
 
   return (
     <Toolbar className={classes.root}>

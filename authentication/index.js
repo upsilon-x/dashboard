@@ -7,7 +7,7 @@ const authContext = createContext();
 
 export function AuthProvider({ children }) {
   const auth = useProvideAuth();
-  console.log(auth);
+  //console.log(auth);
   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
 }
 

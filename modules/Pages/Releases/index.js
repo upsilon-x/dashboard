@@ -26,6 +26,7 @@ const Releases = () => {
     <PageContainer heading={<IntlMessages id="pages.releasesPage" />} breadcrumbs={breadcrumbs}>
       <GridContainer>
         <Grid item xs={12} md={8}>
+          {/* NOTE: Potentially use MUI data grid? */}
           <TableContainer>
             <Table aria-label="release-table">
               <TableHead>

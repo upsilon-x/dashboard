@@ -25,8 +25,8 @@ const breadcrumbs = [
 const Projects = () => {
 
   const { account, chainId } = useEthers();
-  const contractInterface = new utils.Interface(contracts.projectNFT.abi);
-  const contractAddress = contracts.projectNFT[chainIdToName(chainId)] ?? "0x0000000000000000000000000000000000000000";;
+  const contractInterface = new utils.Interface(contracts.ProjectNFT.abi);
+  const contractAddress = contracts.ProjectNFT[chainIdToName(chainId)] ?? "0x0000000000000000000000000000000000000000";;
   const contract = new Contract(contractAddress, contractInterface);
   const { send, state } = useContractFunction(contract, 'mintProject', { transactionName: 'Wrap' });
 
@@ -58,6 +58,7 @@ const Projects = () => {
   useEffect(() => {
     console.log(state);
     if (state.status == "Success") {
+      console.log(state);
       let nftNum = state.receipt.events[0].args.tokenId.toNumber();
       console.log(nftNum);
 
