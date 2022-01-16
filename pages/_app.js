@@ -17,10 +17,10 @@ import AppContextProvider from '../@jumbo/components/contextProvider/AppContextP
 import contracts from "../modules/Context/Contracts";
 
 const config = {
-  multicallAddresses: {}
+  multicallAddresses: { "1337": "0x0" }
 }
 if(process.env.NODE_ENV == "development") {
-  config.multicallAddresses["1337"] = contracts.UpdatedMulticall.development;
+  config.multicallAddresses["1337"] = contracts.Multicall.development;
   console.log("muticall set", config);
 }
 
