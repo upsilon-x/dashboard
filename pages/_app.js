@@ -21,7 +21,6 @@ const config = {
 }
 if(process.env.NODE_ENV == "development") {
   config.multicallAddresses["1337"] = contracts.Multicall.development;
-  console.log("muticall set", config);
 }
 
 

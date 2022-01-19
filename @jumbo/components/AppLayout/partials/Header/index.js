@@ -124,8 +124,6 @@ const Header = () => {
   // Connect to Wallet
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account);
-  console.log("Account: " + account);
-  console.log("Ether Balance: " + etherBalance);
 
   return (
     <Toolbar className={classes.root}>
@@ -153,10 +151,8 @@ const Header = () => {
             Connect
           </Button> : <></>
         }
-        <Typography>
-          {account && <p>Account: {account}</p>}
-          {etherBalance && <p>Balance: {formatEther(etherBalance)}</p>}
-        </Typography>
+        <Typography>{account && `Account: ${account}`}</Typography>
+        <Typography>{etherBalance && `Balance: ${formatEther(etherBalance)}`}</Typography>
       </Box>
 
       {/*
