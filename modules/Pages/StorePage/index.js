@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import GridContainer from '../../../@jumbo/components/GridContainer';
 import PageContainer from '../../../@jumbo/components/PageComponents/layouts/PageContainer';
 import IntlMessages from '../../../@jumbo/utils/IntlMessages';
 import { Grid, Button, Card, InputLabel, TextField, Typography } from '@material-ui/core';
-import { Input } from '@material-ui/core';
 import { useForm } from "react-hook-form";
+import DappContext from "../../Context/DappContext";
 import ValidatedInput from "../../Components/Form/ValidatedInput";
+import { useEthers } from '@usedapp/core'
+import ENV_VAR from "../../../ENV_VAR.json";
+import firebase from 'firebase';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -20,11 +23,29 @@ const breadcrumbs = [
 const StorePage = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
+  let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
+
   const onSubmit = function (data) {
-    // 1. upload
-    // 2. do API request
     console.log(data);
+
+    // 1. upload images
+    // 2. do API request
+    firebase.auth().currentUser.getIdToken()
+    .then(async token => {
+      console.log(token); //reference create.js in Projects folder
+      return fetch(`${functionsURL}/editStorePage`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify(data)
+      })
+    });
   }
+  const { selectedProject, projects } = useContext(DappContext);
+  const { chainId } = useEthers();
 
   return (
     <PageContainer heading={<IntlMessages id="pages.storePage" />} breadcrumbs={breadcrumbs}>
@@ -35,6 +56,10 @@ const StorePage = () => {
             {/* Buttons: Go to Store Page / Add NFTs to Sell */}
             {/* TODO: make a general style for forms */}
             <form onSubmit={handleSubmit(onSubmit)}>
+              <input type="hidden" id="chainId" {...register("chainId")} value={chainId} />
+              <input type="hidden" id="nftId" {...register("nftId")} 
+                value={projects[selectedProject].nftId} 
+              />
               <ValidatedInput errors={errors} register={register}
                 inputId="title" inputType="text" 
                 label="*Display Title:"
