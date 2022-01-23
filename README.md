@@ -1,8 +1,24 @@
 # Dashboard Interface
+The dashboard frontend for managing game projects.  
 
-## How to use
+### Note on Repository Relations
+While each project should be able to run a mainnet on their own, a complete developer 
+environment on the local system will need all four projects. Please complete setup of
+the [firebase functions](https://github.com/upsilon-x/fb-functions) before starting this.  
+Furthermore, all repositories should be within the same folder. It is best if the 
+repositories related to this project are the only repositories within said folder:  
+```
+git-projects
+    - ethereum-game-services
+        - game-services
+        - fb-functions
+        - interface
+        - simple-interface
+```
 
-Run `npm install`.  
+## Setup
+
+Run `npm install --legacy-peer-deps`. Some projects run on React 16 while others run on React 17.  
 Taken from the Jumbo template. [Clone the repo](https://github.com/mui-org/material-ui):
 
 ## Information

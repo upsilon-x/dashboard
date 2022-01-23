@@ -96,22 +96,25 @@ const Header = () => {
   const { projects, selectedProject, setSelectedProject } = useContext(DappContext);
   useEffect(() => {
     let aL = [];
-    projects?.forEach((x, index) => {
-      console.log(x);
-      try {
-        aL.push({
-          icon: <CmtImage src={x.imageURL} height="30px" width="30px" className="mr-2" />,
-          label: x.name,
-          image: x.imageURL,
-          index: index
-        });
+    if(projects != null) {
+      console.log(projects);
+      projects.forEach((x, index) => {
+        console.log(x);
+        try {
+          aL.push({
+            icon: <CmtImage src={x.imageURL} height="30px" width="30px" className="mr-2" />,
+            label: x.name,
+            image: x.imageURL,
+            index: index
+          });
+        }
+        catch {}
+      });
+  
+      if(aL.length > 0) {
+        setActionsList(aL);
+        setActiveOption(aL[selectedProject]);
       }
-      catch {}
-    });
-
-    if(aL.length > 0) {
-      setActionsList(aL);
-      setActiveOption(aL[selectedProject]);
     }
   }, [projects]);
   const [activeOption, setActiveOption] = useState();

@@ -71,10 +71,13 @@ const theme = createTheme({
  * errors = object (react-hook-form)
  * register = function (react-hook-form)
  */
-const ValidatedInput = ({ 
-  errors, register, inputId, inputType, label, validation, customError, 
-  multiline = false, textfield = false 
-}) => {
+const ValidatedInput = props => {
+
+  const {
+    errors, register, inputId, inputType, label, validation, customError,
+    multiline = false, textfield = false, multiple = false, defaultValue = null
+  } = props;
+
   function errorText(err) {
     if (errors[inputId].message != '') {
       return errors[inputId].message;
@@ -115,26 +118,53 @@ const ValidatedInput = ({
           <TextField id={inputId} className="mb-2" variant="outlined"
             style={{ width: "100%" }}
             {...register(inputId, validation)}
-            multiline={multiline}
+            multiline={multiline} defaultValue={defaultValue}
           />
         </>
-        :
-        <>
-          {errors[inputId]?.type != null ?
-            <Typography variant="body2">{errorText(errors[inputId])}</Typography>
-            : <></>
-          }
-          <div style={{ display: "flex" }}>
-            <div style={boxStyle} >
-              {label ? <InputLabel htmlFor={inputId}>{label}</InputLabel> : <></>}
+        : multiple ?
+          <div>
+            {errors[inputId]?.type != null ?
+              <Typography variant="body2">{errorText(errors[inputId])}</Typography>
+              : <></>
+            }
+            <div style={{ display: "flex" }}>
+              <div style={boxStyle} >
+                {label ? <InputLabel htmlFor={inputId}>{label}</InputLabel> : <></>}
+              </div>
+              <Input id={inputId} className="mb-2"
+                style={{ width: "100%" }}
+                {...register(inputId, {...validation, validate: value => {
+                  if(validation.max != null) {
+                    if(value.length > validation.max) 
+                      return `There should be at most ${validation.max} files.`;
+                  }
+                  if(validation.min != null) {
+                    if(value.length < validation.min) 
+                    return `There should be at least ${validation.min} files.`;
+                  }
+                  return true;
+                }})}
+                inputProps={{multiple: true}} type="file" defaultValue={defaultValue}
+              />
             </div>
-            <Input id={inputId} className="mb-2" type={inputType}
-              style={{ width: "100%" }}
-              {...register(inputId, validation)}
-              multiline={multiline}
-            />
           </div>
-        </>
+          :
+          <>
+            {errors[inputId]?.type != null ?
+              <Typography variant="body2">{errorText(errors[inputId])}</Typography>
+              : <></>
+            }
+            <div style={{ display: "flex" }}>
+              <div style={boxStyle} >
+                {label ? <InputLabel htmlFor={inputId}>{label}</InputLabel> : <></>}
+              </div>
+              <Input id={inputId} className="mb-2" type={inputType}
+                style={{ width: "100%" }}
+                {...register(inputId, validation)}
+                multiline={multiline} multiple defaultValue={defaultValue}
+              />
+            </div>
+          </>
       }
     </MuiThemeProvider>
   );

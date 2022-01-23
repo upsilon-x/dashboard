@@ -15,12 +15,16 @@ import { useEthers } from '@usedapp/core'
 import ENV_VAR from "../../../ENV_VAR.json";
 import firebase from 'firebase';
 import DappContext from "../../Context/DappContext";
+import ValidatedInput from "../../Components/Form/ValidatedInput";
+import { useForm } from "react-hook-form";
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
   { label: 'Projects', link: '/projects' },
   { label: 'Create', isActive: true },
 ];
+
+const PROJECT_NAME_ID = "proj-name";
 
 const Projects = () => {
 
@@ -31,21 +35,19 @@ const Projects = () => {
   const { send, state } = useContractFunction(contract, 'mintProject', { transactionName: 'Wrap' });
 
   const { projects, setProjects } = useContext(DappContext);
-  const [ newProject, setNewProject ] = useState(null);
 
   // Form
-  const projectName = useRef("");
-  const [imagePath, setFilePath] = useState("");
+  const [formData, setFormData] = useState("");
   const [waiting, setWaiting] = useState(false);
   const [mintStatus, setMintStatus] = useState("");
-  function handleImageAsFile(e) {
-    e.preventDefault();
-    setFilePath(e.target.files[0]);
-  } 
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   // 1. Make blockchain request
-  function mintProject(e) {
-    // TODO: add form validation
+  function mintProject(data) {
+    console.log(data);
+
+    // Form data is set
+    setFormData(data);
 
     // waiting visual ...
     setWaiting(true);
@@ -68,47 +70,52 @@ const Projects = () => {
 
       // 4. Recieve firebase API request
       firebase.auth().currentUser.getIdToken()
-      .then(async token => {
-        // Upload photo
-        const rand = Math.floor(Math.random() * 100000000000);
-        const uploadTask = firebase.storage().ref(`/images/${account}/${rand}-${imagePath.name}/`).put(imagePath);
-        const imageURL = await new Promise(function(resolve, reject) {
-          uploadTask.on('state_changed', function(snapshot) {}, function error(err) { reject() }, function complete() {
-            uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => resolve(downloadURL));
+        .then(async token => {
+          // Upload photo
+          const rand = Math.floor(Math.random() * 1000000000000);
+          const uploadTask = firebase.storage()
+            .ref(`/images/${account}/${rand}-${formData[PROJECT_NAME_ID]}/`)
+            .put(formData["proj-icon"][0]);
+          const imageURL = await new Promise(function (resolve, reject) {
+            uploadTask.on('state_changed', function (snapshot) { }, function error(err) { reject() }, function complete() {
+              uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => resolve(downloadURL));
+            });
           });
-        });
 
-        setNewProject({
-          nftId: nftNum,
-          chainId: chainId,
-          name: projectName,
-          imageURL: imageURL,
-        });
-
-        console.log("Starting post", projectName, nftNum, chainId);
-        return fetch(`${functionsURL}/mintProject`, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': token
-          },
-          body: JSON.stringify({
-            image: imageURL,
-            name: projectName,
+          const projectName = formData[PROJECT_NAME_ID];
+          const newProject = {
             nftId: nftNum,
-            chainId: chainId
-          })
-        })
-      })
-      .then(response => {
-        setWaiting(false);
+            chainId: chainId,
+            name: projectName,
+            imageURL: imageURL,
+          };
 
-        // Add to projects
-        console.log(newProject);
-        if(projects == null) setProjects([newProject]);
-        else setProjects(projects.push(newProject));
-      })
+          console.log("Starting post", projectName, nftNum, chainId);
+          fetch(`${functionsURL}/mintProject`, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'Authorization': token
+            },
+            body: JSON.stringify({
+              image: imageURL,
+              name: projectName,
+              nftId: nftNum,
+              chainId: chainId
+            })
+          })
+          .then(response => {  
+            // Add to projects
+            if (projects == null) setProjects([newProject]);
+            else setProjects([...projects, newProject]);
+
+            setMintStatus("Project creation successful. Redirecting.");
+
+            // Link back to projects
+            window.location.href = "/projects";
+          })
+        });
     }
     else if (state.status == "Failed" || state.status == "Exception") {
       alert("Oh no! There was an error!");
@@ -128,20 +135,27 @@ const Projects = () => {
         <Grid item xs={12}>
           <CmtCard>
             <CmtCardContent>
-              <IntlMessages id="pages.projectsPage.createProject" />
               {waiting ?
                 <div>Project is being created. Status: {mintStatus}</div>
                 :
-                <div className='mt-2'>
+                <form className='mt-2' onSubmit={handleSubmit(mintProject)}>
                   <div className='mb-2'>
-                    <InputLabel htmlfor="proj-name">Project Name</InputLabel>
-                    <Input id="proj-name" ref={projectName}></Input>
-                    <Input type="file" id="proj-icon" onChange={handleImageAsFile}></Input>
+                    <ValidatedInput errors={errors} register={register}
+                      inputId={PROJECT_NAME_ID} inputType="text"
+                      label="*Project Name:"
+                      validation={{ required: true, maxLength: 50, minLength: 3 }}
+                    />
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="proj-icon" inputType="file"
+                      label="*Project Icon:"
+                      validation={{ required: true }}
+                    />
+                    {/*<Input type="file" id="proj-icon" onChange={handleImageAsFile}></Input>*/}
                   </div>
-                  <Button color="primary" variant="contained" size="small" onClick={mintProject}>
+                  <Button color="primary" variant="contained" size="small" type="submit">
                     Create Project
                   </Button>
-                </div>
+                </form>
               }
             </CmtCardContent>
           </CmtCard>
