@@ -20,16 +20,6 @@ const Releases = () => {
 
   const { projects, selectedProject } = useContext(DappContext);
 
-  /*
-  const releases = [
-    { "id": 9, "version": "1.0.3", "status": "Live" },
-    { "id": 7, "version": "0.8.0", "status": "Archived" },
-    { "id": 6, "version": "0.7.2", "status": "Archived" },
-    { "id": 5, "version": "0.7.1", "status": "Archived" },
-    { "id": 2, "version": "0.6.0", "status": "Archived" },
-  ];
-  */
-
   const { chainId } = useEthers();
 
   const [releases, setReleases] = useState(null);

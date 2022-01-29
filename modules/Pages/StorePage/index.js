@@ -6,6 +6,7 @@ import { Grid, Button, Card, InputLabel, TextField, Typography } from '@material
 import { useForm } from "react-hook-form";
 import DappContext from "../../Context/DappContext";
 import ValidatedInput from "../../Components/Form/ValidatedInput";
+import ValidatedSelect from "../../Components/Form/ValidatedSelect";
 import { useEthers } from '@usedapp/core';
 import ENV_VAR from "../../../ENV_VAR.json";
 import firebase from 'firebase';
@@ -28,8 +29,10 @@ const StorePage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   let functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
 
+  const [submitting, setSubmitting] = useState(false);
   const onSubmit = function (data) {
     console.log(data);
+    setSubmitting("Uploading images...");
 
     // 1. upload storeImages
     function putStorageItem(item) {
@@ -52,10 +55,11 @@ const StorePage = () => {
     Promise.all([...data.storeImages].map(item => putStorageItem(item)))
       .then((urls) => {
         console.log(urls);
+        setSubmitting("Updating store page...");
         data.storeImages = urls;
         // 2. do API request
         firebase.auth().currentUser.getIdToken()
-          .then(async token => {
+          .then(token => {
             console.log(token); //reference create.js in Projects folder
             return fetch(`${functionsURL}/editStorePage`, {
               method: 'POST',
@@ -66,11 +70,52 @@ const StorePage = () => {
               },
               body: JSON.stringify(data)
             })
+          })
+          .then(res => {
+            setSubmitting(false);
+          })
+          .catch(res => {
+            setSubmitting("There was an error! Please reset");
           });
       })
   }
+
   const { selectedProject, projects } = useContext(DappContext);
   const { account, chainId } = useEthers();
+  const [releases, setReleases] = useState(null);
+
+  // Gets all of the releases to be used in the form
+  if (releases == null && selectedProject != null) {
+    setReleases(false);
+    fetch(`${functionsURL}/getReleases`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        nftId: projects[selectedProject].nftId,
+        chainId: chainId
+      })
+    })
+      .then((response) => response.json())
+      .then(res => {
+        console.log(res);
+        let options = [{ value: -1, name: "No Release" }];
+        res.map(x => {
+          console.log(x);
+          options.push({
+            value: x.releaseId,
+            name: "v" + x.version + (x.status === "Live" ? " (Current)" : ""),
+          });
+        });
+        console.log(options);
+        setReleases(options);
+      });
+  }
+
+
+
 
   return (
     <PageContainer heading={<IntlMessages id="pages.storePage" />} breadcrumbs={breadcrumbs}>
@@ -89,53 +134,66 @@ const StorePage = () => {
                   </Button>
                 </Link>
               </section>
-              :
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <input type="hidden" id="chainId" {...register("chainId")} value={chainId} />
-                <input type="hidden" id="nftId" {...register("nftId")}
-                  value={projects[selectedProject].nftId}
-                />
-                <ValidatedInput errors={errors} register={register}
-                  inputId="title" inputType="text"
-                  label="*Display Title:"
-                  validation={{ required: true, maxLength: 50, minLength: 3 }}
-                  defaultValue={projects[selectedProject].title ?? ""}
-                />
-                <ValidatedInput errors={errors} register={register}
-                  inputId="blurb" inputType="text" multiline
-                  label="*Blurb:"
-                  validation={{ required: true, maxLength: 150, minLength: 10 }}
-                  defaultValue={projects[selectedProject].blurb ?? ""}
-                />
-                <ValidatedInput errors={errors} register={register}
-                  inputId="trailer" inputType="url"
-                  label="Youtube Trailer:"
-                  defaultValue={projects[selectedProject].trailer ?? ""}
-                />
-                <ValidatedInput errors={errors} register={register}
-                  inputId="audit" inputType="url"
-                  label="Audit:"
-                  defaultValue={projects[selectedProject].audit ?? ""}
-                />
-                {/* TODO: Make the images orderable */}
-                <ValidatedInput errors={errors} register={register}
-                  inputId="storeImages" multiple
-                  label="*Store Images:" inputType="multiple"
-                  validation={{ required: true, max: 8, min: 2 }}
-                />
-                {/* TODO: Replace with markdown */}
-                <ValidatedInput errors={errors} register={register}
-                  inputId="description" multiline textfield
-                  label="*Description:"
-                  validation={{ required: true, maxLength: 10000, minLength: 100 }}
-                  defaultValue={projects[selectedProject].description ?? ""}
-                />
-                <div>
-                  <Button className="mr-2 mb-2" variant="contained" type="submit">
-                    Submit Changes
-                  </Button>
-                </div>
-              </form>
+              : releases == null || releases === false ?
+                <section>
+                  <div>Fetching releases. Please hold...</div>
+                </section>
+                : submitting !== false ?
+                  <section>
+                    <div>Submitting your game's awesomeness. Please hold. {submitting}</div>
+                  </section> :
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <input type="hidden" id="chainId" {...register("chainId")} value={chainId} />
+                    <input type="hidden" id="nftId" {...register("nftId")}
+                      value={projects[selectedProject].nftId}
+                    />
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="title" inputType="text"
+                      label="*Display Title:"
+                      validation={{ required: true, maxLength: 50, minLength: 3 }}
+                      defaultValue={projects[selectedProject].title ?? ""}
+                    />
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="blurb" inputType="text" multiline
+                      label="*Blurb:"
+                      validation={{ required: true, maxLength: 150, minLength: 10 }}
+                      defaultValue={projects[selectedProject].blurb ?? ""}
+                    />
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="trailer" inputType="url"
+                      label="Youtube Trailer:"
+                      defaultValue={projects[selectedProject].trailer ?? ""}
+                    />
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="audit" inputType="url"
+                      label="Audit:"
+                      defaultValue={projects[selectedProject].audit ?? ""}
+                    />
+                    {/* TODO: Make the images orderable */}
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="storeImages" multiple
+                      label="*Store Images:" inputType="multiple"
+                      validation={{ required: true, max: 8, min: 2 }}
+                    />
+                    {/* TODO: Replace with markdown */}
+                    <ValidatedInput errors={errors} register={register}
+                      inputId="description" multiline textfield
+                      label="*Description:"
+                      validation={{ required: true, maxLength: 10000, minLength: 100 }}
+                      defaultValue={projects[selectedProject].description ?? ""}
+                    />
+                    <ValidatedSelect errors={errors} register={register}
+                      inputId="releaseId"
+                      options={releases} label="Select Release:"
+                      validation={{ required: true }}
+                      defaultValue={projects[selectedProject].releaseId}
+                    />
+                    <div>
+                      <Button className="mr-2 mb-2" variant="contained" type="submit">
+                        Submit Changes
+                      </Button>
+                    </div>
+                  </form>
             }
           </Card>
         </Grid>
