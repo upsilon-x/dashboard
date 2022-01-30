@@ -18,7 +18,7 @@ const breadcrumbs = [
 ];
 
 const Projects = () => {
-  const { projects, setSelectedProject } = useContext(DappContext);
+  const { projects, selectedProject, setSelectedProject } = useContext(DappContext);
 
   return (
     <PageContainer heading={<IntlMessages id="pages.projectsPage" />} breadcrumbs={breadcrumbs}>
@@ -29,10 +29,16 @@ const Projects = () => {
             <CmtCard>
               <CmtCardHeader title={x.name}></CmtCardHeader>
               <CmtCardContent>
-                <CmtImage src={x.imageURL} alt={x.name} />
-                <Button color="primary" size="small" variant="contained" onClick={function () { setSelectedProject(i); }}>
-                  <IntlMessages id="sidebar.components.muiComponents.inputs.select" />
-                </Button>
+                <flex>
+                  <CmtImage src={x.imageURL} alt={x.name} style={{ width: "100%", margin: "auto" }} />
+                </flex>
+                <div>
+                  <Button color="primary" size="small" variant="contained"
+                    disabled={selectedProject == i}
+                    onClick={function () { setSelectedProject(i); }}>
+                    {selectedProject == i ? "Selected!" : "Select"}
+                  </Button>
+                </div>
               </CmtCardContent>
             </CmtCard>
           </Grid>
@@ -43,9 +49,9 @@ const Projects = () => {
               <IntlMessages id="pages.projectsPage.createProject" />
               <div className='mt-2'>
                 <Link href="projects/create">
-                <Button color="primary" variant="contained" size="small" >
-                  <PostAdd />
-                </Button>
+                  <Button color="primary" variant="contained" size="small" >
+                    <PostAdd />
+                  </Button>
                 </Link>
               </div>
             </CmtCardContent>

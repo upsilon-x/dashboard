@@ -31,11 +31,13 @@ const DappContextProvider = ({ children }) => {
       .then((response) => response.json())
       .then(response => {
         setProjects(response);
-        if(response.length > 0) setSelectedProject(0);
+        if(selectedProject >= response.length) { 
+          console.log(`Setting selected project from ${selectedProject} due to response being size ${response.length}:`, 0);
+          setSelectedProject(0);
+        }
       })
     }
   }, [account, chainId]);
-
 
 
   const contextValue = React.useMemo(() => {
@@ -45,7 +47,7 @@ const DappContextProvider = ({ children }) => {
       selectedProject,
       setSelectedProject
     };
-  }, [projects]);
+  }, [projects, selectedProject]);
 
   return <DappContext.Provider value={contextValue}>{children}</DappContext.Provider>;
 };

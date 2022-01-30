@@ -96,10 +96,8 @@ const Header = () => {
   const { projects, selectedProject, setSelectedProject } = useContext(DappContext);
   useEffect(() => {
     let aL = [];
-    if(projects != null) {
-      console.log(projects);
+    if (projects != null) {
       projects.forEach((x, index) => {
-        console.log(x);
         try {
           aL.push({
             icon: <CmtImage src={x.imageURL} height="30px" width="30px" className="mr-2" />,
@@ -108,10 +106,10 @@ const Header = () => {
             index: index
           });
         }
-        catch {}
+        catch { }
       });
-  
-      if(aL.length > 0) {
+
+      if (aL.length > 0) {
         setActionsList(aL);
         setActiveOption(aL[selectedProject]);
       }
@@ -122,30 +120,42 @@ const Header = () => {
   const onItemClick = (option) => {
     setActiveOption({ label: option.label, image: option.image });
     setSelectedProject(option.index);
+    console.log("Setting selected project on item click:", option.index);
   };
 
   // Connect to Wallet
   const { activateBrowserWallet, account } = useEthers()
   const etherBalance = useEtherBalance(account);
 
+  // Checks for external changes to the selected project
+  useEffect(() => {
+    if (actionsList[selectedProject] != null && actionsList[selectedProject].image !== activeOption.image) {
+      setActiveOption({ 
+        label: actionsList[selectedProject].label, 
+        image: actionsList[selectedProject].image 
+      });
+    }
+  }, [selectedProject]);
+
   return (
     <Toolbar className={classes.root}>
       <SidebarToggleHandler edge="start" color="inherit" aria-label="menu" />
       {actionsList.length > 0 ?
-      <Box display="flex" flexDirection='row' mt='unset'>
-        <CmtImage
-          src={activeOption?.image}
-          height="30px"
-          width="30px"
-          className="mr-2"
-        />
-        <Typography size="md" className="mr-1">{activeOption?.label}</Typography>
-        <CmtDropdownMenu
-          onItemClick={onItemClick}
-          TriggerComponent={<KeyboardArrowDownIcon />}
-          items={actionsList}
-        />
-      </Box> : <></>
+        <Box display="flex" flexDirection='row' mt='unset'>
+          <CmtImage
+            src={activeOption?.image}
+            height="30px"
+            width="30px"
+            className="mr-2"
+          />
+          <Typography size="md" className="mr-1">{activeOption?.label}</Typography>
+          <CmtDropdownMenu
+            onItemClick={onItemClick}
+            TriggerComponent={<KeyboardArrowDownIcon />}
+            items={actionsList}
+            value={selectedProject}
+          />
+        </Box> : <></>
       }
       <Box flex={1} />
       <Box>
