@@ -6,6 +6,7 @@ import IntlMessages from '../../../@jumbo/utils/IntlMessages';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 import SidebarButtons from '../../../@jumbo/components/AppLayout/partials/SideBar/SIdebarButtons';
+import RequireSetProject from '../../Components/RequireSetProject';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -17,17 +18,19 @@ const Achievements = () => {
     <PageContainer heading={<IntlMessages id="pages.achievementsPage" />} breadcrumbs={breadcrumbs}>
       <GridContainer>
         <Grid item xs={12}>
-          <Box>
-            <IntlMessages id="pages.achievementsPage.description" />
-          </Box>
-          <Divider />
-          <div style={{ marginTop: 24 }}>
-            <h3>Knowledge Base and Support</h3>
-            <SidebarButtons />
-          </div>
+          <RequireSetProject>
+            <Box>
+              <IntlMessages id="pages.achievementsPage.description" />
+            </Box>
+            <Divider />
+            <div style={{ marginTop: 24 }}>
+              <h3>Knowledge Base and Support</h3>
+              <SidebarButtons />
+            </div>
+          </RequireSetProject>
         </Grid>
       </GridContainer>
-    </PageContainer>
+    </PageContainer >
   );
 };
 

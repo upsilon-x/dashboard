@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import ImportContactsIcon from '@material-ui/icons/ImportContacts';
-import RotateLeftIcon from '@material-ui/icons/RotateLeft';
-import FlagIcon from '@material-ui/icons/Flag';
+import TwitterIcon from '@material-ui/icons/Twitter';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import List from '@material-ui/core/List';
@@ -58,60 +57,39 @@ const useStyles = makeStyles((theme) => ({
 const buttons = [
   {
     title: {
-      text: 'Documentations',
+      text: 'Documentation',
       color: '#5D9405',
     },
     icon: <ImportContactsIcon />,
     backgroundColor: '#D7F5B1',
-    link: 'https://docs-jumbo.g-axon.work/',
-  },
-  {
-    title: {
-      text: 'Changelog',
-      color: '#384CC4',
-    },
-    icon: <RotateLeftIcon />,
-    backgroundColor: '#EAEDFF',
-    link: 'https://docs-jumbo.g-axon.work/settings/change-logs',
-  },
-  {
-    title: {
-      text: 'Raise a ticket',
-      color: '#019592',
-    },
-    subTitle: {
-      text: 'Avg. response time 18 hrs.',
-      color: '#00C4B4',
-    },
-    icon: <FlagIcon />,
-    backgroundColor: '#D8FFF7',
-    link: 'https://themeforest.net/item/react-material-bootstrap-4-admin-template/20978545/support',
+    link: 'https://me4jeremyboett.gitbook.io/upsilonx-developer-docs/',
   },
   {
     title: {
       text: 'Join Community',
       color: '#D36F1A',
     },
-    subTitle: {
-      text: 'Join 1000+ memers.',
-      color: '#FF8C00',
-    },
     icon: <GroupWorkIcon />,
     backgroundColor: '#FFF1D2',
-    link: 'https://jumbo-react.slack.com/join/shared_invite/enQtNTQyMTA4MDk5NjIwLWFiYjk0YzBmY2E4MTRmOGQwOGE4ZWNkNTFmMjBiZGU5ZjY5ZmYyOTgwYjgzZjM5MWIxMmY5ZjE5M2UxMTkwOGE#/',
+    link: 'https://discord.gg/NqAX5TdqXk',
   },
   {
     title: {
       text: 'Github Access',
       color: '#0356AF',
     },
-    subTitle: {
-      text: 'Get connected with Github.',
-      color: '#0795F4',
-    },
     icon: <GitHubIcon />,
     backgroundColor: '#E3F9FF',
-    link: 'http://github.g-axon.com/index.php?repo=gaxon-lab/jumbo-react-5.x.x',
+    link: 'https://github.com/upsilon-x',
+  },
+  {
+    title: {
+      text: 'Find us on Twitter',
+      color: '#019592',
+    },
+    icon: <TwitterIcon />,
+    backgroundColor: '#D8FFF7',
+    link: 'https://twitter.com/home',
   },
 ];
 

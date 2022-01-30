@@ -10,9 +10,9 @@ import ValidatedSelect from "../../Components/Form/ValidatedSelect";
 import { useEthers } from '@usedapp/core';
 import ENV_VAR from "../../../ENV_VAR.json";
 import firebase from 'firebase';
-import Link from "next/link";
 import RUG from 'react-upload-gallery';
 import 'react-upload-gallery/dist/style.css';
+import RequireSetProject from '../../Components/RequireSetProject';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -85,7 +85,7 @@ const StorePage = () => {
   const [releases, setReleases] = useState(null);
 
   // Gets all of the releases to be used in the form
-  if (releases == null && selectedProject != null) {
+  if (releases == null && projects != null && projects[selectedProject] != null) {
     setReleases(false);
     fetch(`${functionsURL}/getReleases`, {
       method: 'POST',
@@ -122,19 +122,10 @@ const StorePage = () => {
       <GridContainer>
         <Grid item xs={12} sm={8}>
           <Card style={{ padding: "16px 16px" }}>
-            {/* Make a simple form here. Shouldn't be too hard. Video, images, etc */}
             {/* Buttons: Go to Store Page / Add NFTs to Sell */}
             {/* TODO: make a general style for forms */}
-            {projects == null || projects[selectedProject] == null ?
-              <section>
-                <div>Please select a valid project before making a store copy.</div>
-                <Link href="projects">
-                  <Button color="primary" variant="contained" size="small" className='mt-2' >
-                    Go to Projects Page
-                  </Button>
-                </Link>
-              </section>
-              : releases == null || releases === false ?
+            <RequireSetProject>
+              {releases == null || releases === false ?
                 <section>
                   <div>Fetching releases. Please hold...</div>
                 </section>
@@ -194,7 +185,8 @@ const StorePage = () => {
                       </Button>
                     </div>
                   </form>
-            }
+              }
+            </RequireSetProject>
           </Card>
         </Grid>
         <Grid item sm={4} xs={12}>

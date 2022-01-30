@@ -8,6 +8,7 @@ import Link from 'next/link';
 import DappContext from "../../Context/DappContext";
 import { useEthers } from '@usedapp/core'
 import ENV_VAR from "../../../ENV_VAR.json";
+import RequireSetProject from '../../Components/RequireSetProject';
 
 const functionsURL = ENV_VAR[process.env.NODE_ENV].functions;
 
@@ -23,7 +24,7 @@ const Releases = () => {
   const { chainId } = useEthers();
 
   const [releases, setReleases] = useState(null);
-  if (releases == null && projects != null) {
+  if (releases == null && projects != null && projects[selectedProject] != null) {
     setReleases(false);
     fetch(`${functionsURL}/getReleases`, {
       method: 'POST',
@@ -36,11 +37,11 @@ const Releases = () => {
         chainId: chainId
       })
     })
-    .then((response) => response.json())
-    .then(res => {
-      console.log(res);
-      setReleases(res);
-    })
+      .then((response) => response.json())
+      .then(res => {
+        console.log(res);
+        setReleases(res);
+      })
   }
 
 
@@ -49,33 +50,35 @@ const Releases = () => {
     <PageContainer heading={<IntlMessages id="pages.releasesPage" />} breadcrumbs={breadcrumbs}>
       <GridContainer>
         <Grid item xs={12} md={8}>
-          {/* NOTE: Potentially use MUI data grid? */
-            releases === null || releases === false ?
-              <div>Hold on. Getting releases...</div>
-              :
-              <TableContainer>
-                <Table aria-label="release-table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Release Id</TableCell>
-                      <TableCell>Version</TableCell>
-                      <TableCell align="right">Status</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {releases.map((row) => (
-                      <TableRow key={row.releaseId}>
-                        <TableCell component="th" scope="row">
-                          {row.releaseId}
-                        </TableCell>
-                        <TableCell>v{row.version}</TableCell>
-                        <TableCell align="right">{row.status}</TableCell>
+          <RequireSetProject>
+            {/* NOTE: Potentially use MUI data grid? */
+              releases === null || releases === false ?
+                <div>Hold on. Getting releases...</div>
+                :
+                <TableContainer>
+                  <Table aria-label="release-table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Release Id</TableCell>
+                        <TableCell>Version</TableCell>
+                        <TableCell align="right">Status</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-          }
+                    </TableHead>
+                    <TableBody>
+                      {releases.map((row) => (
+                        <TableRow key={row.releaseId}>
+                          <TableCell component="th" scope="row">
+                            {row.releaseId}
+                          </TableCell>
+                          <TableCell>v{row.version}</TableCell>
+                          <TableCell align="right">{row.status}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+            }
+          </RequireSetProject>
         </Grid>
         <Grid item xs={12} md={4}>
           <Card style={{ padding: "12px 12px" }}>

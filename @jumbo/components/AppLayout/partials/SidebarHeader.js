@@ -8,6 +8,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SidebarThemeContext from '../../../../@coremat/CmtLayouts/SidebarThemeContext/SidebarThemeContext';
 import { useRouter } from 'next/router';
+import Link from 'next/Link';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +62,12 @@ const SidebarHeader = () => {
 
   return (
     <div className={classes.root}>
-      <CmtAvatar src={"https://firebasestorage.googleapis.com/v0/b/ethgameservices-dev.appspot.com/o/dashboard%2Fupsx-logo-447.png?alt=media&token=2ed8d5c3-0c7b-455b-a3f3-1b2a721a37cb"} alt="UpsilonX" />
+      <Link href={"/"}>
+        <CmtAvatar src={"https://firebasestorage.googleapis.com/v0/b/ethgameservices-dev.appspot.com/o/dashboard%2Fupsx-logo-447.png?alt=media&token=2ed8d5c3-0c7b-455b-a3f3-1b2a721a37cb"} alt="UpsilonX" />
+      </Link>
+      {open && (
+        <div>POG BOIS</div>
+      )}
       {/*
       <CmtAvatar src={'https://via.placeholder.com/150x150'} alt="User Avatar" />
       <div className={classes.userInfo} onClick={handlePopoverOpen}>

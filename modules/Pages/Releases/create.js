@@ -10,6 +10,7 @@ import DappContext from "../../Context/DappContext";
 import ENV_VAR from "../../../ENV_VAR.json";
 import { useEthers } from '@usedapp/core';
 import firebase from 'firebase';
+import RequireSetProject from '../../Components/RequireSetProject';
 
 const breadcrumbs = [
   { label: 'Home', link: '/' },
@@ -67,32 +68,34 @@ const Releases = () => {
       <GridContainer>
         <Grid item xs={8}>
           <Card style={{ padding: "12px 12px" }}>
-            {submitting ?
-              <div>Please wait while the release is being uploaded. Do not leave this page.</div>
-              :
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <input type="hidden" id="chainId" {...register("chainId")} value={chainId} />
-                <input type="hidden" id="nftId" {...register("nftId")}
-                  value={projects[selectedProject].nftId}
-                />
-                <ValidatedInput errors={errors} register={register}
-                  inputId="version" inputType="text"
-                  label="*Release Version:"
-                  validation={{
-                    required: true,
-                    validate: value => (/[0-9.]/.test(value) ? true : "Must be in the form 1.0.1")
-                  }}
-                />
-                <ValidatedInput errors={errors} register={register}
-                  inputId="webgl" inputType="file"
-                  label="*Release WebGL File:"
-                  validation={{ required: true }}
-                />
-                <Button className="mr-2 mb-2" variant="contained" type="submit">
-                  Submit New Release
-                </Button>
-              </form>
-            }
+            <RequireSetProject>
+              {submitting ?
+                <div>Please wait while the release is being uploaded. Do not leave this page.</div>
+                :
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <input type="hidden" id="chainId" {...register("chainId")} value={chainId} />
+                  <input type="hidden" id="nftId" {...register("nftId")}
+                    value={projects[selectedProject]?.nftId}
+                  />
+                  <ValidatedInput errors={errors} register={register}
+                    inputId="version" inputType="text"
+                    label="*Release Version:"
+                    validation={{
+                      required: true,
+                      validate: value => (/[0-9.]/.test(value) ? true : "Must be in the form 1.0.1")
+                    }}
+                  />
+                  <ValidatedInput errors={errors} register={register}
+                    inputId="webgl" inputType="file"
+                    label="*Release WebGL File:"
+                    validation={{ required: true }}
+                  />
+                  <Button className="mr-2 mb-2" variant="contained" type="submit">
+                    Submit New Release
+                  </Button>
+                </form>
+              }
+            </RequireSetProject>
           </Card>
         </Grid>
         <Grid item xs={4}>
